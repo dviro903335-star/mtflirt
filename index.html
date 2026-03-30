@@ -3,96 +3,121 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>DIRTY FLIRT PRO</title>
+    <title>DARK WINGMAN | AI Engine</title>
     <style>
-        :root { --red: #ff3b30; --gray: #1c1c1e; --text: #ffffff; }
-        body, html { margin: 0; padding: 0; background: #000; height: 100%; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; color: var(--text); overflow: hidden; }
-        .app-container { display: flex; flex-direction: column; height: 100vh; padding: env(safe-area-inset-top) 25px env(safe-area-inset-bottom); box-sizing: border-box; }
-        .header { text-align: center; padding: 50px 0 30px; }
-        .header h1 { font-size: 2.8rem; font-weight: 900; letter-spacing: -2px; margin: 0; text-transform: uppercase; }
-        .header h1 span { color: var(--red); }
-        .version { font-size: 0.6rem; color: #444; letter-spacing: 3px; margin-top: 5px; font-weight: bold; }
-        .input-card { background: var(--gray); border-radius: 30px; padding: 25px; border: 1px solid #2c2c2e; margin-bottom: 20px; box-shadow: 0 15px 35px rgba(0,0,0,0.5); }
-        textarea { width: 100%; background: transparent; border: none; color: #fff; font-size: 1.3rem; outline: none; resize: none; font-family: inherit; line-height: 1.4; text-align: right; }
-        .btn-action { background: #fff; color: #000; width: 100%; border-radius: 100px; padding: 22px; border: none; font-weight: 800; font-size: 1.1rem; cursor: pointer; transition: all 0.2s; -webkit-tap-highlight-color: transparent; }
-        .btn-action:active { transform: scale(0.96); background: #d1d1d6; }
-        #results { flex-grow: 1; overflow-y: auto; margin-top: 25px; padding-bottom: 20px; display: none; }
-        .analysis { background: rgba(255, 59, 48, 0.1); border-right: 4px solid var(--red); padding: 15px; border-radius: 15px; font-size: 1rem; margin-bottom: 20px; line-height: 1.5; color: #efeff4; }
-        .reply-card { background: var(--gray); padding: 20px; border-radius: 20px; margin-bottom: 12px; border: 1px solid #3a3a3c; animation: fadeIn 0.4s ease forwards; }
-        .reply-card b { color: var(--red); font-size: 0.75rem; text-transform: uppercase; display: block; margin-bottom: 8px; letter-spacing: 1px; }
-        .reply-card p { margin: 0; font-size: 1.15rem; font-weight: 600; line-height: 1.4; }
-        .loader { display: none; text-align: center; margin: 30px 0; color: var(--red); font-weight: bold; font-size: 0.8rem; letter-spacing: 3px; animation: pulse 1.5s infinite; }
-        @keyframes pulse { 0% { opacity: 0.4; } 50% { opacity: 1; } 100% { opacity: 0.4; } }
+        :root { --gold: #d4af37; --bg: #050505; --card: #121212; --text: #e0e0e0; }
+        body, html { margin: 0; padding: 0; background: var(--bg); height: 100%; font-family: -apple-system, system-ui, sans-serif; color: var(--text); overflow-x: hidden; }
+        .container { display: flex; flex-direction: column; min-height: 100vh; padding: 50px 20px 30px; box-sizing: border-box; max-width: 500px; margin: 0 auto; }
+        
+        .header { text-align: center; margin-bottom: 40px; }
+        .header h1 { font-size: 2rem; font-weight: 200; letter-spacing: 5px; margin: 0; text-transform: uppercase; color: #fff; }
+        .header h1 span { font-weight: 900; color: var(--gold); }
+        .header p { font-size: 0.6rem; letter-spacing: 3px; color: #444; margin-top: 5px; }
+
+        .vibe-selector { display: flex; gap: 10px; margin-bottom: 20px; }
+        .vibe-btn { flex: 1; background: #1a1a1a; border: 1px solid #333; color: #888; padding: 12px; border-radius: 8px; font-size: 0.8rem; cursor: pointer; transition: 0.3s; }
+        .vibe-btn.active { border-color: var(--gold); color: var(--gold); background: rgba(212, 175, 55, 0.05); }
+
+        .input-area { background: var(--card); border-radius: 15px; padding: 20px; border: 1px solid #222; margin-bottom: 20px; }
+        textarea { width: 100%; background: transparent; border: none; color: #fff; font-size: 1.1rem; outline: none; resize: none; text-align: right; font-family: inherit; }
+        
+        .action-btn { background: var(--gold); color: #000; width: 100%; border-radius: 10px; padding: 20px; border: none; font-weight: 800; font-size: 1rem; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 10px 20px rgba(0,0,0,0.3); }
+        .action-btn:active { transform: scale(0.98); opacity: 0.9; }
+
+        #results { margin-top: 40px; display: none; animation: fadeIn 0.5s ease; }
+        .subtext-box { background: rgba(212, 175, 55, 0.1); border-right: 3px solid var(--gold); padding: 15px; border-radius: 8px; font-size: 0.95rem; margin-bottom: 25px; line-height: 1.6; }
+        .reply-card { background: var(--card); padding: 18px; border-radius: 12px; margin-bottom: 12px; border: 1px solid #222; cursor: pointer; position: relative; }
+        .reply-card b { color: var(--gold); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 8px; }
+        .reply-card p { margin: 0; font-size: 1.1rem; font-weight: 500; }
+        
+        .loader { display: none; text-align: center; color: var(--gold); font-size: 0.7rem; letter-spacing: 4px; padding: 30px; animation: pulse 1.5s infinite; }
+        @keyframes pulse { 0% { opacity: 0.3; } 50% { opacity: 1; } 100% { opacity: 0.3; } }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
 
-<div class="app-container">
+<div class="container">
     <div class="header">
-        <h1>DIRTY<span>FLIRT</span></h1>
-        <div class="version">AI ENGINE PRO V8.0</div>
+        <h1>DARK<span>WINGMAN</span></h1>
+        <p>ADVANCED SOCIAL INTELLIGENCE</p>
     </div>
 
-    <div class="input-card">
-        <textarea id="msgInput" rows="3" placeholder="מה היא כתבה?"></textarea>
+    <div class="vibe-selector">
+        <button class="vibe-btn active" onclick="setVibe('עוקצני', this)">עוקצני</button>
+        <button class="vibe-btn" onclick="setVibe('מסתורי', this)">מסתורי</button>
+        <button class="vibe-btn" onclick="setVibe('ישיר', this)">ישיר</button>
     </div>
 
-    <button class="btn-action" onclick="processAI()">נתח וייב וחשב תגובה</button>
+    <div class="input-area">
+        <textarea id="userInput" rows="3" placeholder="מה היא כתבה? (או תאר את התמונה שלה)"></textarea>
+    </div>
 
-    <div id="loader" class="loader">SCANNING SUBTEXT...</div>
+    <button class="action-btn" onclick="runAI()">Analyze & Generate</button>
+
+    <div id="loader" class="loader">DECRYPTING SUBTEXT...</div>
 
     <div id="results">
-        <div class="analysis" id="anaBody"></div>
-        <div id="repliesList"></div>
+        <div class="subtext-box" id="subtext"></div>
+        <div id="replyList"></div>
     </div>
 </div>
 
 <script>
-async function processAI() {
-    const input = document.getElementById('msgInput').value.trim();
-    if(!input) return;
+    let currentVibe = 'עוקצני';
 
-    const loader = document.getElementById('loader');
-    const results = document.getElementById('results');
-    loader.style.display = 'block';
-    results.style.display = 'none';
-
-    const key = "AIzaSyCQ8LPtzo7mhz-ICSIHyvr-ILvAYRxTADg";
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${key}`;
-
-    const prompt = `אתה מומחה דייטינג חריף. נתח את ההודעה הבאה מהבחורה: "${input}". 
-    תן ניתוח סאבטקסט קצרצר (מה היא באמת חושבת) ו-3 תגובות "אלפא" בעברית (עוקצנית, מסתורית, ישירה).
-    תחזיר תשובה בפורמט JSON בלבד: {"analysis": "...", "replies": [{"t":"עוקצנית", "c":"..."}, {"t":"מסתורית", "c":"..."}, {"t":"ישירה", "c":"..."}]}`;
-
-    try {
-        const response = await fetch(url, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
-        });
-        const data = await response.json();
-        const cleanJson = data.candidates[0].content.parts[0].text.replace(/```json/g, '').replace(/```/g, '').trim();
-        const res = JSON.parse(cleanJson);
-
-        document.getElementById('anaBody').innerText = res.analysis;
-        const list = document.getElementById('repliesList');
-        list.innerHTML = '';
-        res.replies.forEach(r => {
-            list.innerHTML += `<div class="reply-card" onclick="copy('${r.c}')"><b>${r.t}</b><p>${r.c}</p></div>`;
-        });
-
-        loader.style.display = 'none';
-        results.style.display = 'block';
-    } catch (e) {
-        alert("תקלה בחיבור. וודא שהמפתח פעיל.");
-        loader.style.display = 'none';
+    function setVibe(vibe, btn) {
+        currentVibe = vibe;
+        document.querySelectorAll('.vibe-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
     }
-}
-function copy(t) {
-    navigator.clipboard.writeText(t);
-    alert("הועתק ללוח!");
-}
+
+    async function runAI() {
+        const text = document.getElementById('userInput').value.trim();
+        if(!text) return;
+
+        document.getElementById('loader').style.display = 'block';
+        document.getElementById('results').style.display = 'none';
+
+        const apiKey = "AIzaSyCQ8LPtzo7mhz-ICSIHyvr-ILvAYRxTADg"; // תוודא שהמפתח Active ב-AI Studio
+        const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+
+        const prompt = `אתה DARK WINGMAN, מומחה דייטינג חריף. נתח את זה: "${text}".
+        וייב מבוקש: ${currentVibe}.
+        תחזיר תשובה בפורמט JSON בלבד:
+        {"analysis": "מה היא באמת חושבת בסאבטקסט (קצר וחריף)", 
+         "replies": ["תגובה 1 בסגנון ${currentVibe}", "תגובה 2 בסגנון ${currentVibe}", "תגובה 3 בסגנון ${currentVibe}"]}
+        תהיה אלפא, לא מתנצל, ועוקצני.`;
+
+        try {
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
+            });
+            const data = await response.json();
+            const cleanText = data.candidates[0].content.parts[0].text.replace(/```json/g, '').replace(/```/g, '').trim();
+            const res = JSON.parse(cleanText);
+
+            document.getElementById('subtext').innerText = "SUBTEXT: " + res.analysis;
+            const list = document.getElementById('replyList');
+            list.innerHTML = '';
+            res.replies.forEach(r => {
+                list.innerHTML += `<div class="reply-card" onclick="copyText('${r}')"><b>${currentVibe}</b><p>${r}</p></div>`;
+            });
+
+            document.getElementById('loader').style.display = 'none';
+            document.getElementById('results').style.display = 'block';
+        } catch (e) {
+            alert("תקלה בחיבור. וודא שהמפתח ב-AI Studio מוגדר כ-Active.");
+            document.getElementById('loader').style.display = 'none';
+        }
+    }
+
+    function copyText(t) {
+        navigator.clipboard.writeText(t);
+        alert("התגובה הועתקה! שלח לה.");
+    }
 </script>
 </body>
 </html>
